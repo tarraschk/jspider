@@ -4,7 +4,7 @@
 // │ Copyright © 2013 Maxime Alay-Eddine                                │ \\
 // │ Copyright © 2013 SportinTown (http://www.sportintown.com)          │ \\
 // ├────────────────────────────────────────────────────────────────────┤ \\
-// │ Licensed under the MIT (http://raphaeljs.com/license.html) license.│ \\
+// │ Licensed under the MIT license.                                    │ \\
 // └────────────────────────────────────────────────────────────────────┘ \\
 
 function diagramme(div, width, height, radius, min, max, labels, values, radiusbutton) { // Generic diagram builder
@@ -102,6 +102,8 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 					this.paper.set(this.markers[i]).drag(
 							//move part
 							function (dx, dy, x, y) {
+								var x = event.pageX - $('#'+that.div).offset().left;
+								var y = event.pageY - $('#'+that.div).offset().top;
 								var r = ((that.cy-y)*(-that.radius*Math.sin(2*Math.PI*this.iter/that.labels.length))-(that.cx-x)*(that.radius*Math.cos(2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
 								if (r<0){r=0;}
 								if (r>that.radius){r=that.radius;}
@@ -126,8 +128,8 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 								}
 							);
 				    this.paper.set(this.arrowsAreas[i]).click(function(event) {
-				            var mouseX = event.pageX - $(document).scrollLeft() - $('#'+that.div).offset().left;
-				            var mouseY = event.pageY - $(document).scrollTop() - $('#'+that.div).offset().top;
+				            var mouseX = event.pageX - $('#'+that.div).offset().left;
+				            var mouseY = event.pageY - $('#'+that.div).offset().top;
 				            var r = ((that.cy-mouseY)*(-that.radius*Math.sin(2*Math.PI*this.iter/that.labels.length))-(that.cx-mouseX)*(that.radius*Math.cos(2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
 								if (r<0){r=0;}
 								if (r>that.radius){r=that.radius;}

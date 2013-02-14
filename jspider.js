@@ -38,13 +38,13 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 			var chaine = "";
 			for(var i=0;i<this.labels.length;i++){
 				if(i==0){chaine = chaine + "M"}else{chaine=chaine+"L"};
-				 chaine = chaine+(this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(2*Math.PI*i/this.labels.length))+" ";
+				 chaine = chaine+(this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length))+" ";
 				 }
 				 chaine = chaine + "z";
 			//this.paper.path(chaine).attr(this.polygonAttr);
 			this.paper.path(chaine).attr(this.polygonStrokeAttr);
 			for(var i=0;i<this.labels.length;i++){
-				this.markers[i] = this.paper.circle((this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(2*Math.PI*i/this.labels.length)), (this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(2*Math.PI*i/this.labels.length)), this.radiusButton).attr(this.markersAttr);
+				this.markers[i] = this.paper.circle((this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length)), (this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length)), this.radiusButton).attr(this.markersAttr);
 				this.markers[i].iter = i;
 			}
 		}
@@ -52,7 +52,7 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 			var chaine = "";
 			for(var i=0;i<this.labels.length;i++){
 				if(i==0){chaine = chaine + "M"}else{chaine=chaine+"L"};
-				 chaine = chaine+(this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(2*Math.PI*i/this.labels.length))+" ";
+				 chaine = chaine+(this.cx + (this.values[i]/(this.max-this.min))*this.radius*Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.values[i]/(this.max-this.min))*this.radius* Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length))+" ";
 				 }
 				 chaine = chaine + "z";
 			this.paper.path(chaine).attr(this.polygonAttr);
@@ -63,18 +63,10 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 		diagramme.prototype.importer = function (val) { // open data
 			this.values = val;
 		}
-		diagramme.prototype.sector = function (cx, cy, r, startAngle, endAngle, params) {
-			var	rad = Math.PI / 180;
-	        var x1 = cx + r * Math.cos(-startAngle * rad),
-	            x2 = cx + r * Math.cos(-endAngle * rad),
-	            y1 = cy + r * Math.sin(-startAngle * rad),
-	            y2 = cy + r * Math.sin(-endAngle * rad);
-	        return this.paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
-	    }
 	    diagramme.prototype.polygon = function (n, r, cx, cy, params) { // plot a polygon centered in cx cy with n edges and a radius of r
-	    	var chaine = "M"+(cx+r)+" "+cy+" ";
+	    	var chaine = "M"+(cx)+" "+(cy+r)+" ";
 	    	for(var i=1;i<n;i++) {
-		    	chaine = chaine + "L"+(cx+r*Math.cos(2*Math.PI*i/n))+" "+(cy+r*Math.sin(2*Math.PI*i/n))+" ";
+		    	chaine = chaine + "L"+(cx+r*Math.cos(Math.PI/2+2*Math.PI*i/n))+" "+(cy+r*Math.sin(Math.PI/2+2*Math.PI*i/n))+" ";
 	    	}
 	    	chaine = chaine+"z";
 	    	return this.paper.path(chaine).attr(params);
@@ -86,10 +78,10 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 			this.tracePolygon();
 			var offset = (Math.min(this.h,this.w)/2-this.radius)/2;
 			for(var i=0;i<this.labels.length;i++){
-				this.paper.text(this.cx + (this.radius + offset) * Math.cos(2*Math.PI*i/this.labels.length), this.cy + (this.radius + offset) * Math.sin(2*Math.PI*i/this.labels.length), this.labels[i]);
-				this.arrows[i] = this.paper.path("M"+this.cx+" "+this.cy+" L"+(this.cx + this.radius * Math.cos(2*Math.PI*i/this.labels.length))+" "+(this.cy + this.radius * Math.sin(2*Math.PI*i/this.labels.length))).attr("stroke", "#000000");
+				this.paper.text(this.cx + (this.radius + offset) * Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length), this.cy + (this.radius + offset) * Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length), this.labels[i]);
+				this.arrows[i] = this.paper.path("M"+this.cx+" "+this.cy+" L"+(this.cx + this.radius * Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length))+" "+(this.cy + this.radius * Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length))).attr("stroke", "#000000");
 				this.arrows[i].iter = i;
-				this.arrowsAreas[i] = this.paper.path("M"+this.cx+" "+this.cy+" L"+(this.cx + (this.radius+offset) * Math.cos(2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.radius+offset) * Math.sin(2*Math.PI*i/this.labels.length))).attr({"stroke-opacity": 0, "stroke-width":10});
+				this.arrowsAreas[i] = this.paper.path("M"+this.cx+" "+this.cy+" L"+(this.cx + (this.radius+offset) * Math.cos(Math.PI/2+2*Math.PI*i/this.labels.length))+" "+(this.cy + (this.radius+offset) * Math.sin(Math.PI/2+2*Math.PI*i/this.labels.length))).attr({"stroke-opacity": 0, "stroke-width":10});
 				this.arrowsAreas[i].iter = i;
 			}
 		}
@@ -104,12 +96,12 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 							function (dx, dy, x, y) {
 								var x = event.pageX - $('#'+that.div).offset().left;
 								var y = event.pageY - $('#'+that.div).offset().top;
-								var r = ((that.cy-y)*(-that.radius*Math.sin(2*Math.PI*this.iter/that.labels.length))-(that.cx-x)*(that.radius*Math.cos(2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
+								var r = ((that.cy-y)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-x)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
 								if (r<0){r=0;}
 								if (r>that.radius){r=that.radius;}
 								this.attr({
-									cx: that.cx + (Math.cos(2*Math.PI*this.iter/that.labels.length))*r,
-									cy: that.cy + (Math.sin(2*Math.PI*this.iter/that.labels.length))*r
+									cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
+									cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
 									});
 								that.values[this.iter] = r/that.radius*(that.max-that.min);
 							},
@@ -130,12 +122,12 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
 				    this.paper.set(this.arrowsAreas[i]).click(function(event) {
 				            var mouseX = event.pageX - $('#'+that.div).offset().left;
 				            var mouseY = event.pageY - $('#'+that.div).offset().top;
-				            var r = ((that.cy-mouseY)*(-that.radius*Math.sin(2*Math.PI*this.iter/that.labels.length))-(that.cx-mouseX)*(that.radius*Math.cos(2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
+				            var r = ((that.cy-mouseY)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-mouseX)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
 								if (r<0){r=0;}
 								if (r>that.radius){r=that.radius;}
 								this.attr({
-									cx: that.cx + (Math.cos(2*Math.PI*this.iter/that.labels.length))*r,
-									cy: that.cy + (Math.sin(2*Math.PI*this.iter/that.labels.length))*r
+									cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
+									cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
 									});
 								that.values[this.iter] = r/that.radius*(that.max-that.min);
 								that.paper.remove();

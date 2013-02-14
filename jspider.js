@@ -7,9 +7,10 @@
 // │ Licensed under the MIT license.                                    │ \\
 // └────────────────────────────────────────────────────────────────────┘ \\
 
-function diagramme(div, width, height, radius, min, max, labels, values, radiusbutton) { // Generic diagram builder
+function diagramme(div, width, height, radius, min, max, labels, labelsId, values, radiusbutton) { // Generic diagram builder
 	this.div = div;
 	this.labels = labels;
+	this.labelsId = labelsId;
 	this.min = min;
 	this.max = max;
 	this.w = width;
@@ -59,9 +60,11 @@ function diagramme(div, width, height, radius, min, max, labels, values, radiusb
         }
 		diagramme.prototype.exporter = function () { // returns data with json
 			console.log(this.values);
+			console.log(this.labelsId);
 		}
 		diagramme.prototype.importer = function (val) { // open data
 			this.values = val;
+			return this;
 		}
 	    diagramme.prototype.polygon = function (n, r, cx, cy, params) { // plot a polygon centered in cx cy with n edges and a radius of r
 	    	var chaine = "M"+(cx)+" "+(cy+r)+" ";

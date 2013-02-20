@@ -7,7 +7,7 @@
 // │ Licensed under the MIT license.                                    │ \\
 // └────────────────────────────────────────────────────────────────────┘ \\
 
-function diagramme(div, width, height, radius, min, max, labels, labelsId, values, radiusbutton) { // Generic diagram builder
+function diagramme(div, width, height, radius, min, max, labels, labelsId, values, radiusbutton, isEditable) { // Generic diagram builder
 	this.div = div;
 	this.labels = labels;
 	this.labelsId = labelsId;
@@ -32,6 +32,9 @@ function diagramme(div, width, height, radius, min, max, labels, labelsId, value
 		for(var i=0;i<values.length;i++) {
 			values[i] = 1;
 		}
+	}
+	if(typeof isEditable == 'undefined') {
+		isEditable = false;
 	}
 	this.values = values;
 	if( typeof diagramme.initialized == "undefined" ) { // When implementing the class for first time
@@ -92,52 +95,54 @@ function diagramme(div, width, height, radius, min, max, labels, labelsId, value
 				this.paper = new Raphael(this.div, this.w, this.h);
 				this.drawBG();
 				this.trace();
-				var that = this;
-				for(var i=0;i<this.labels.length;i++){
-					this.paper.set(this.markers[i]).drag(
-							//move part
-							function (dx, dy, x, y) {
-								var x = event.pageX - $('#'+that.div).offset().left;
-								var y = event.pageY - $('#'+that.div).offset().top;
-								var r = ((that.cy-y)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-x)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
-								if (r<0){r=0;}
-								if (r>that.radius){r=that.radius;}
-								this.attr({
-									cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
-									cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
-									});
-								that.values[this.iter] = r/that.radius*(that.max-that.min);
-							},
-							//start part
-							function () {
-								this.ox = this.attr("cx");
-								this.oy = this.attr("cy");
-								this.animate({r: 2*that.radiusButton, opacity: .8}, 500, ">");
+				if(isEditable) {
+					var that = this;
+					for(var i=0;i<this.labels.length;i++){
+						this.paper.set(this.markers[i]).drag(
+								//move part
+								function (dx, dy, x, y) {
+									var x = event.pageX - $('#'+that.div).offset().left;
+									var y = event.pageY - $('#'+that.div).offset().top;
+									var r = ((that.cy-y)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-x)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
+									if (r<0){r=0;}
+									if (r>that.radius){r=that.radius;}
+									this.attr({
+										cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
+										cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
+										});
+									that.values[this.iter] = r/that.radius*(that.max-that.min);
 								},
-							//up part
-							function () {
-								this.animate({r: that.radiusButton, opacity: 1}, 500, ">");
-								that.paper.remove();
-								that.exporter();
-								that.init();
-								}
-							);
-				    this.paper.set(this.arrowsAreas[i]).click(function(event) {
-				            var mouseX = event.pageX - $('#'+that.div).offset().left;
-				            var mouseY = event.pageY - $('#'+that.div).offset().top;
-				            var r = ((that.cy-mouseY)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-mouseX)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
-								if (r<0){r=0;}
-								if (r>that.radius){r=that.radius;}
-								this.attr({
-									cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
-									cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
-									});
-								that.values[this.iter] = r/that.radius*(that.max-that.min);
-								that.paper.remove();
-								that.exporter();
-								that.init();
- 				        }
-				    );
+								//start part
+								function () {
+									this.ox = this.attr("cx");
+									this.oy = this.attr("cy");
+									this.animate({r: 2*that.radiusButton, opacity: .8}, 500, ">");
+									},
+								//up part
+								function () {
+									this.animate({r: that.radiusButton, opacity: 1}, 500, ">");
+									that.paper.remove();
+									that.exporter();
+									that.init();
+									}
+								);
+					    this.paper.set(this.arrowsAreas[i]).click(function(event) {
+					            var mouseX = event.pageX - $('#'+that.div).offset().left;
+					            var mouseY = event.pageY - $('#'+that.div).offset().top;
+					            var r = ((that.cy-mouseY)*(-that.radius*Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))-(that.cx-mouseX)*(that.radius*Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length)))/((that.radius)^2);
+									if (r<0){r=0;}
+									if (r>that.radius){r=that.radius;}
+									this.attr({
+										cx: that.cx + (Math.cos(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r,
+										cy: that.cy + (Math.sin(Math.PI/2+2*Math.PI*this.iter/that.labels.length))*r
+										});
+									that.values[this.iter] = r/that.radius*(that.max-that.min);
+									that.paper.remove();
+									that.exporter();
+									that.init();
+	 				        }
+					    );
+					}
 				}
 		}
 		diagramme.initialized = true;

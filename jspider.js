@@ -69,6 +69,10 @@ function diagramme(div, width, height, radius, min, max, labels, labelsId, value
 			this.values = val;
 			return this;
 		}
+		diagramme.prototype.update = function () {
+    		this.paper.remove();
+    		this.init();
+		}
 	    diagramme.prototype.polygon = function (n, r, cx, cy, params) { // plot a polygon centered in cx cy with n edges and a radius of r
 	    	var chaine = "M"+(cx)+" "+(cy+r)+" ";
 	    	for(var i=1;i<n;i++) {

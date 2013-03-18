@@ -7,7 +7,15 @@
     <meta name="description" content="jSpider : Interactive spider charts with jQuery &amp; Raphael.js" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
+    <script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/raphael.js" type="text/javascript" charset="utf-8"></script>
+	  <script src="javascripts/jspider.js" type="text/javascript" charset="utf-8"></script>
+	  <script type="text/javascript" charset="utf-8">
+		$(function () { // Launching the diagram
+			myDiagram = new diagramme("demo", 400, 300, 100, 0, 10, ["force", "agilitÃ©", "endurance", "sagesse", "intelligence", "charisme"], [1,2,3,6,8,9], [5, 2, 3, 10, 5, 4], 5, true);
+			myDiagram.init();
+		});
+	  </script>
     <title>jSpider</title>
   </head>
 
@@ -38,8 +46,7 @@
 <li>Easy import/export your values</li>
 <li>Up to 10 criterions (can go further, but won't be beautiful)</li>
 </ul><h3>Demo</h3>
-
-<p>Test</p>
+<div id="demo" style="width: 400px; height: 300px; border: 1px solid black;"></div>
       </section>
     </div>
 
